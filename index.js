@@ -9,20 +9,6 @@ for(let i = 0; i < collisions.length; i += 100){
     collisionsMap.push(collisions.slice(i, 100 + i));
 }
 
-class Boundary{
-        static width = 48;
-        static height = 48;
-        constructor({position}){
-            this.position = position;
-            this.width = 48;
-            this.height = 48;
-        }
-        draw(){
-            ctx.fillStyle = 'rgba(255, 0, 0, 0.0)';
-            ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
-        }
-}
-
 const boundaries = [];
 const offset = {
     x: -450,
@@ -45,44 +31,36 @@ collisionsMap.forEach((row, i) => {
 const image = new Image();
 image.src = './img/BrimL1.png';
 
-const playerImage = new Image();
-playerImage.src = './img/Brim/BDown.png';
+const foregroundImage = new Image();
+foregroundImage.src = './img/foregroundObjects.png';
 
-class Sprite{
-    constructor({position, velocity, image, frames = {max: 1}}){
-        this.position = position;
-        this.image = image;
-        this.frames = frames;
-        this.image.onload = () => {
-            this.width = this.image.width/this.frames.max;
-            this.height = this.image.height;
-        }
-    }   
+const playerDown = new Image();
+playerDown.src = './img/Brim/BDown.png';
 
-    draw(){
-        // ctx.drawImage(this.image, this.position.x, this.position.y);
-        ctx.drawImage(
-            this.image,
-            0,
-            0,
-            this.image.width/this.frames.max,
-            this.image.height,
-            this.position.x,
-            this.position.y,
-            this.image.width/this.frames.max,
-            this.image.height
-        );
-    }
-}
+const playerUp = new Image();
+playerUp.src = './img/Brim/BUp.png';
+
+const playerLeft = new Image();
+playerLeft.src = './img/Brim/BLeft.png';
+
+const playerRight = new Image();
+playerRight.src = './img/Brim/BRight.png';
+
 
 const player = new Sprite({
     position: {
         x: canvas.width/2 - 192/4/2, 
         y: canvas.height/2 - 68/2,
     },
-    image: playerImage,
+    image: playerDown,
     frames: {
         max: 4,
+    },
+    sprites: {
+        up: playerUp,
+        left: playerLeft,
+        right: playerRight,
+        down: playerDown,
     }
 })
 
@@ -92,6 +70,14 @@ const background = new Sprite({
         y: offset.y,
     },
     image: image
+})
+
+const foreground = new Sprite({
+    position: {
+        x: offset.x, 
+        y: offset.y,
+    },
+    image: foregroundImage
 })
 
 const keys = {
@@ -109,7 +95,7 @@ const keys = {
     },
 }
 
-const moveables = [background, ...boundaries];
+const moveables = [background, ...boundaries, foreground];
 
 function rectangularCollision({rect1, rect2}){
     return(
@@ -126,11 +112,14 @@ function animate(){
     boundaries.forEach(boundary => {
         boundary.draw();
     });
-
     player.draw();
+    foreground.draw();
 
     let moving = true;
+    player.moving = false;
     if(keys.w.pressed) {
+        player.moving = true;
+        player.image = player.sprites.up;
         for(let i = 0; i < boundaries.length; i++){
             const boundary = boundaries[i];
             if(
@@ -156,6 +145,8 @@ function animate(){
             })
     }
     else if(keys.a.pressed) {
+        player.moving = true;
+        player.image = player.sprites.left;
         for(let i = 0; i < boundaries.length; i++){
             const boundary = boundaries[i];
             if(
@@ -181,6 +172,8 @@ function animate(){
             })
     }
     else if(keys.s.pressed) {
+        player.moving = true;
+        player.image = player.sprites.down;
         for(let i = 0; i < boundaries.length; i++){
             const boundary = boundaries[i];
             if(
@@ -206,6 +199,8 @@ function animate(){
             })
     }
     else if(keys.d.pressed) {
+        player.moving = true;
+        player.image = player.sprites.right;
         for(let i = 0; i < boundaries.length; i++){
             const boundary = boundaries[i];
             if(
