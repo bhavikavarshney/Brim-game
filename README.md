@@ -12,7 +12,7 @@ They're faced with enemies that can be defeated with power-ups and skills they o
 ![image](https://github.com/bhavikavarshney/Brim-game/assets/100194346/50478125-9574-4d6e-8a5f-b1e62f81af4e)
 
 ## Deployment
-The deployment for this game will be done once it's completed.
+[Here's the current progress!](https://bhavikavarshney.github.io/Brim-game/)
 
 <br />
 
