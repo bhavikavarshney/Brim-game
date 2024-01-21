@@ -32,7 +32,7 @@ const image = new Image();
 image.src = './img/BrimL1.png';
 
 const foregroundImage = new Image();
-foregroundImage.src = './img/foregroundObjects.png';
+foregroundImage.src = './img/L1foregroundObjects.png';
 
 const playerDown = new Image();
 playerDown.src = './img/Brim/BDown.png';
